@@ -1,0 +1,25 @@
+---
+name: bosh-bootstrap-google
+
+network:
+  type: dynamic
+
+env:
+  bosh:
+    password: $6$salt$password
+
+cloud:
+  plugin: google
+  properties:
+    google:
+      project: cloud-project
+      client_email: email@developer.gserviceaccount.com
+      pkcs12_key: pkcs12-key
+      default_zone: zone
+      access_key_id: access_key_id
+      secret_access_key: secret_access_key
+      private_key: spec/assets/fake-private.key
+    registry:
+      endpoint: http://admin:admin@10.176.194.184:25695
+      user: admin
+      password: admin

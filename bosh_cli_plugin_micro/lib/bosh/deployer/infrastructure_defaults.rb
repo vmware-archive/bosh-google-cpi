@@ -1,4 +1,5 @@
 require 'bosh/deployer/infrastructure_defaults/aws'
+require 'bosh/deployer/infrastructure_defaults/google'
 require 'bosh/deployer/infrastructure_defaults/openstack'
 require 'bosh/deployer/infrastructure_defaults/vcloud'
 require 'bosh/deployer/infrastructure_defaults/vsphere'
@@ -8,6 +9,8 @@ module Bosh::Deployer::InfrastructureDefaults
     case plugin
       when 'aws'
         defaults = AWS
+      when 'google'
+        defaults = GOOGLE
       when 'openstack'
         defaults = OPENSTACK
       when 'vcloud'
