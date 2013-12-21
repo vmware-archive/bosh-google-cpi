@@ -110,6 +110,22 @@ describe Bosh::Registry do
       im.should be_kind_of(Bosh::Registry::InstanceManager::Openstack)
     end
 
+    it "reads provided configuration file and sets singletons for Google Compute Engine" do
+      Fog::Compute.stub(:new)
+
+      config = valid_config
+      config['cloud'] = {
+        'plugin' => 'google',
+        'google' => {
+          'project'      => 'cloud-project',
+          'client_email' => 'email@developer.gserviceaccount.com',
+          'pkcs12_key'   => 'pkcs12-key'
+        }
+      }
+      Bosh::Registry.configure(config)
+
+      expect(Bosh::Registry.instance_manager).to be_kind_of(Bosh::Registry::InstanceManager::Google)
+    end
   end
 
   describe "database configuration" do

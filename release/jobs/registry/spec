@@ -54,6 +54,14 @@ properties:
     description: Max number of retries to connect to AWS
     default: 2
 
+  # For Google Compute Engine
+  google.project:
+    description: Google Compute Engine project
+  google.client_email:
+    description: Google Compute Engine client email
+  google.pkcs12_key:
+    description: Google Compute Engine PKCS12 key (Base64 encoded - RFC 2045)
+
   # For OpenStack
   openstack.auth_url:
     description: URL of the OpenStack Identity endpoint to connect to

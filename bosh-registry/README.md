@@ -46,7 +46,7 @@ These are the options for the cloud connection where registry will fetch for
 the IP addresses belonging to a instances:
 
 * `plugin` (required)
-  Cloud Provider (currently supported: aws and openstack)
+  Cloud Provider (currently supported: aws, google and openstack)
 
 #### AWS options
 
@@ -60,6 +60,17 @@ These are the credentials to connect to AWS services:
   AWS EC2 Region
 * `max_retries` (optional, defaults to 2)
   Max number of retries to connect to AWS
+
+#### Google Compute Engine options
+
+These are the credentials to connect to Google Compute Engine services:
+
+* `project` (required)
+  Google Compute Engine project
+* `client_email` (required)
+  Google Compute Engine client email
+* `pkcs12_key` (required)
+  Google Compute Engine PKCS12 key (Base64 encoded - RFC 2045)
 
 #### OpenStack options
 

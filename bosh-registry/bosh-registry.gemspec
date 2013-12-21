@@ -24,4 +24,5 @@ Gem::Specification.new do |s|
   s.add_dependency 'yajl-ruby', '~>1.1.0'
   s.add_dependency 'fog',       '~>1.19.0'
   s.add_dependency 'aws-sdk',   '1.32.0'
+  s.add_dependency 'google-api-client', '~>0.6.4'
 end

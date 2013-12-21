@@ -27,6 +27,13 @@ cloud:
     max_retries: <%= max_retries %>
     <% end %>
 <% end %>
+<% if_p('google.project', 'google.client_email', 'google.pkcs12_key') do |project, client_email, pkcs12_key| %>
+  plugin: google <% plugin = 'google' %>
+  google:
+    project: <%= project %>
+    client_email: <%= client_email %>
+    pkcs12_key: '<%= pkcs12_key %>'
+<% end %>
 <% if_p('openstack.auth_url', 'openstack.username', 'openstack.api_key', 'openstack.tenant') do |auth_url, username, api_key, tenant| %>
   plugin: openstack <% plugin = 'openstack' %>
   openstack:

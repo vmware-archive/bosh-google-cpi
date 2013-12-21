@@ -94,6 +94,7 @@ PATH
     bosh-registry (1.2479.0)
       aws-sdk (= 1.32.0)
       fog (~> 1.19.0)
+      google-api-client (~> 0.6.4)
       sequel (~> 3.43.0)
       sinatra (~> 1.4.2)
       thin (~> 1.5.0)
