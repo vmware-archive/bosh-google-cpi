@@ -6,6 +6,8 @@ module Bosh::Stemcell
           OpenStack.new
         when 'aws'
           Aws.new
+        when 'google'
+          Google.new
         when 'vsphere'
           Vsphere.new
         when 'vcloud'
@@ -66,6 +68,12 @@ module Bosh::Stemcell
     class Aws < Base
       def initialize
         super(name: 'aws', hypervisor: 'xen', supports_light_stemcell: true, default_disk_size: 2048)
+      end
+    end
+
+    class Google < Base
+      def initialize
+        super(name: 'google', hypervisor: 'kvm', supports_light_stemcell: true, default_disk_size: 10240)
       end
     end
   end

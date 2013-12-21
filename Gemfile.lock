@@ -116,6 +116,7 @@ PATH
   specs:
     bosh-stemcell (1.2479.0)
       bosh_aws_cpi (~> 1.2479.0)
+      bosh_google_cpi (~> 1.2479.0)
 
 PATH
   remote: bosh_agent

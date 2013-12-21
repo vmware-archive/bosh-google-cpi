@@ -46,6 +46,8 @@ module Bosh::Stemcell
       case infrastructure
       when Infrastructure::Aws then
         aws_stages
+      when Infrastructure::Google then
+        google_stages
       when Infrastructure::OpenStack then
         openstack_stages
       when Infrastructure::Vsphere then
@@ -179,6 +181,26 @@ module Bosh::Stemcell
         :image_aws_prepare_stemcell,
         # Final stemcell
         :stemcell,
+      ]
+    end
+
+    def google_stages
+      [
+        # Misc
+        :system_google_network,
+        :system_google_modules,
+        :system_google_packages,
+        :system_parameters,
+        # Finalisation,
+        :bosh_clean,
+        :bosh_harden,
+        :bosh_harden_ssh,
+        # Image/bootloader
+        :image_create,
+        :image_install_grub,
+        :image_google_prepare_stemcell,
+        # Final stemcell
+        :stemcell
       ]
     end
 

@@ -7,6 +7,7 @@ module Bosh::Stemcell
       it 'returns the correct infrastrcture' do
         expect(Infrastructure.for('openstack')).to be_an(Infrastructure::OpenStack)
         expect(Infrastructure.for('aws')).to be_an(Infrastructure::Aws)
+        expect(Infrastructure.for('google')).to be_an(Infrastructure::Google)
         expect(Infrastructure.for('vsphere')).to be_a(Infrastructure::Vsphere)
         expect(Infrastructure.for('vcloud')).to be_a(Infrastructure::Vcloud)
         expect(Infrastructure.for('null')).to be_an(Infrastructure::NullInfrastructure)
@@ -79,6 +80,13 @@ module Bosh::Stemcell
 
     it { should eq Infrastructure.for('aws') }
     it { should_not eq Infrastructure.for('openstack') }
+  end
+
+  describe Infrastructure::Google do
+    its(:name)              { should eq('google') }
+    its(:hypervisor)        { should eq('kvm') }
+    its(:default_disk_size) { should eq(10240) }
+    it { should be_light }
   end
 
   describe Infrastructure::OpenStack do

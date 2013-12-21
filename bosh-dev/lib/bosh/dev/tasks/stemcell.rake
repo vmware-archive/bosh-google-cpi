@@ -2,8 +2,16 @@ namespace :stemcell do
   desc 'Create light stemcell from existing stemcell'
   task :build_light, [:stemcell_path] do |_,args|
     require 'bosh/stemcell/aws/light_stemcell'
+    require 'bosh/stemcell/google/light_stemcell'
     stemcell = Bosh::Stemcell::Archive.new(args.stemcell_path)
-    light_stemcell = Bosh::Stemcell::Aws::LightStemcell.new(stemcell)
+    light_stemcell = case stemcell.infrastructure
+      when 'aws'
+        Bosh::Stemcell::Aws::LightStemcell.new(stemcell)
+      when 'google'
+        Bosh::Stemcell::Google::LightStemcell.new(stemcell)
+      else
+        raise ArgumentError.new("invalid stemcell infrastructure: #{stemcell.infrastructure}")
+    end
     light_stemcell.write_archive
   end
 

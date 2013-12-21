@@ -39,3 +39,12 @@ run_in_chroot $chroot "
   rpm -i /rpmbuild/RPMS/${runit_version}.rpm
 "
 #/runit
+
+# Timezone
+run_in_chroot $chroot "
+  rm /etc/localtime
+  ln -s /usr/share/zoneinfo/UTC /etc/localtime
+"
+
+# Locale
+cp $assets_dir/etc/sysconfig/i18n $chroot/etc/sysconfig/i18n

@@ -34,11 +34,15 @@ module Bosh::Stemcell
     end
 
     def light?
-      infrastructure == 'aws' && ami_id
+      (infrastructure == 'aws' && ami_id) || (infrastructure == 'google' && source_url)
     end
 
     def ami_id(region = Aws::Region::DEFAULT)
       cloud_properties.fetch('ami', {}).fetch(region, nil)
+    end
+
+    def source_url
+      cloud_properties.fetch('source_url', nil)
     end
 
     def extract(tar_options = {}, &block)

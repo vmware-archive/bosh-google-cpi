@@ -65,18 +65,45 @@ fi
 
 if [ -f ${image_mount_point}/etc/debian_version ] # Ubuntu
 then
+  if [ $stemcell_infrastructure == "google" ]
+  then
+cat > ${image_mount_point}/boot/grub/grub.conf <<GRUB_CONF
+default=0
+timeout=1
+serial --unit=0 --speed=38400
+terminal --timeout=5 serial console
+title ${os_name} (${kernel_version})
+  root (hd0,0)
+  kernel /boot/vmlinuz-${kernel_version} ro root=UUID=${uuid} selinux=0 cgroup_enable=memory swapaccount=1 console=ttyS0,38400n8
+  initrd /boot/${initrd_file}
+GRUB_CONF
+  else
 cat > ${image_mount_point}/boot/grub/grub.conf <<GRUB_CONF
 default=0
 timeout=1
 title ${os_name} (${kernel_version})
   root (hd0,0)
-  kernel /boot/vmlinuz-${kernel_version} ro root=UUID=${uuid} selinux=0
+  kernel /boot/vmlinuz-${kernel_version} ro root=UUID=${uuid} selinux=0 cgroup_enable=memory swapaccount=1
   initrd /boot/${initrd_file}
 GRUB_CONF
+  fi
 elif [ -f ${image_mount_point}/etc/centos-release ] # Centos
 then
 # We need to set xen_blkfront.sda_is_xvda=1 to force CentOS to
 # have device mapping consistant with Ubuntu.
+  if [ $stemcell_infrastructure == "google" ]
+  then
+cat > ${image_mount_point}/boot/grub/grub.conf <<GRUB_CONF
+default=0
+timeout=1
+serial --unit=0 --speed=38400
+terminal --timeout=5 serial console
+title ${os_name} (${kernel_version})
+  root (hd0,0)
+  kernel /boot/vmlinuz-${kernel_version} xen_blkfront.sda_is_xvda=1 ro root=UUID=${uuid} selinux=0 console=ttyS0,38400n8
+  initrd /boot/${initrd_file}
+GRUB_CONF
+  else
 cat > ${image_mount_point}/boot/grub/grub.conf <<GRUB_CONF
 default=0
 timeout=1
@@ -85,6 +112,7 @@ title ${os_name} (${kernel_version})
   kernel /boot/vmlinuz-${kernel_version} xen_blkfront.sda_is_xvda=1 ro root=UUID=${uuid} selinux=0
   initrd /boot/${initrd_file}
 GRUB_CONF
+  fi
 else
   echo "Unknown OS, exiting"
   exit 2

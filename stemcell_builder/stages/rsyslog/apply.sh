@@ -77,7 +77,7 @@ run_in_bosh_chroot $chroot "
   cd src
   tar zxvf $jsonc_archive
   cd $jsonc_basename
-  ./configure
+  ./configure --disable-oldname-compat
   make && make install
 "
 

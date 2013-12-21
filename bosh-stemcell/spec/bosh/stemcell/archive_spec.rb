@@ -82,7 +82,19 @@ module Bosh::Stemcell
         end
       end
 
-      context 'when infrastructure is anything but "aws"' do
+      context 'when infrastructure is "google"' do
+        context 'when there is not a "source_url" key in the "cloud_properties" section of the manifest' do
+          let(:stemcell_path) { spec_asset('fake-stemcell-google.tgz') }
+          it { should_not be_light }
+        end
+
+        context 'when there is an "source_url" key in the "cloud_properties" section of the manifest' do
+          let(:stemcell_path) { spec_asset('light-fake-stemcell-google.tgz') }
+          it { should be_light }
+        end
+      end
+
+      context 'when infrastructure is anything but "aws" and "google"' do
         let(:stemcell_path) { spec_asset('fake-stemcell-vsphere.tgz') }
         it { should_not be_light }
       end
@@ -103,6 +115,25 @@ module Bosh::Stemcell
       context 'when infrastructure is anything but "aws"' do
         let(:stemcell_path) { spec_asset('fake-stemcell-vsphere.tgz') }
         its(:ami_id) { should be_nil }
+      end
+    end
+
+    describe '#source_url' do
+      context 'when infrastructure is "google"' do
+        context 'when there is not an "source_url" key in the "cloud_properties" section of the manifest' do
+          let(:stemcell_path) { spec_asset('fake-stemcell-google.tgz') }
+          its(:source_url) { should be_nil }
+        end
+
+        context 'when there is an "source_url" key in the "cloud_properties" section of the manifest' do
+          let(:stemcell_path) { spec_asset('light-fake-stemcell-google.tgz') }
+          its(:source_url) { should eq('gs://bosh-stemcells/fake-stemcell.tar.gz') }
+        end
+      end
+
+      context 'when infrastructure is anything but "google"' do
+        let(:stemcell_path) { spec_asset('fake-stemcell-vsphere.tgz') }
+        its(:source_url) { should be_nil }
       end
     end
 

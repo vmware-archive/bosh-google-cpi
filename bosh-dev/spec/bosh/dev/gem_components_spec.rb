@@ -37,6 +37,7 @@ module Bosh::Dev
         GemComponent.should_receive(:new).with('bosh_cli_plugin_micro', gem_version.version)
         GemComponent.should_receive(:new).with('bosh_common', gem_version.version)
         GemComponent.should_receive(:new).with('bosh_cpi', gem_version.version)
+        GemComponent.should_receive(:new).with('bosh_google_cpi', gem_version.version)
         GemComponent.should_receive(:new).with('bosh_openstack_cpi', gem_version.version)
         GemComponent.should_receive(:new).with('bosh-registry', gem_version.version)
         GemComponent.should_receive(:new).with('bosh_vsphere_cpi', gem_version.version)
@@ -64,6 +65,7 @@ module Bosh::Dev
           bosh_cli_plugin_micro
           bosh_common
           bosh_cpi
+          bosh_google_cpi
           bosh_openstack_cpi
           bosh-registry
           bosh_vsphere_cpi

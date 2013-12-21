@@ -200,6 +200,17 @@ module Bosh::Stemcell
           end
         end
 
+        context 'when infrastructure is google' do
+          let(:infrastructure) { Infrastructure.for('google') }
+          let(:default_disk_size) { 10240 }
+
+          it_sets_correct_environment_variables
+
+          it 'has no "image_vsphere_ovf_ovftool_path" key' do
+            expect(stemcell_builder_options.default).not_to have_key('image_vsphere_ovf_ovftool_path')
+          end
+        end
+
         context 'when infrastructure is openstack' do
           let(:infrastructure) { Infrastructure.for('openstack') }
           let(:default_disk_size) { 10240 }

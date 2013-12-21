@@ -66,6 +66,22 @@ module Bosh::Stemcell
       ]
     }
 
+    let(:google_infrastructure_stages) {
+      [
+        :system_google_network,
+        :system_google_modules,
+        :system_google_packages,
+        :system_parameters,
+        :bosh_clean,
+        :bosh_harden,
+        :bosh_harden_ssh,
+        :image_create,
+        :image_install_grub,
+        :image_google_prepare_stemcell,
+        :stemcell
+      ]
+    }
+
     let(:openstack_ubuntu_infrastructure_stages) {
       [
         :system_openstack_network,
@@ -234,6 +250,26 @@ module Bosh::Stemcell
             expect(stage_collection.infrastructure_stages).to eq(aws_infrastructure_stages)
           end
 
+        end
+      end
+
+      context 'when using Google' do
+        let(:infrastructure) { Infrastructure.for('google') }
+
+        context 'when operating system is Centos' do
+          let(:operating_system) { OperatingSystem.for('centos') }
+
+          it 'has the correct stages' do
+            expect(stage_collection.infrastructure_stages).to eq(google_infrastructure_stages)
+          end
+        end
+
+        context 'when operating system is Ubuntu' do
+          let(:operating_system) { OperatingSystem.for('ubuntu') }
+
+          it 'has the correct stages' do
+            expect(stage_collection.infrastructure_stages).to eq(google_infrastructure_stages)
+          end
         end
       end
 

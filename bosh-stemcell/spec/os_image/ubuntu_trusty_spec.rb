@@ -111,6 +111,7 @@ describe 'Ubuntu 14.04 OS image' do
       sudo
       uuid-dev
       libgcrypt11-dev
+      ca-certificates
     ).each do |pkg|
       describe package(pkg) do
         it { should be_installed }

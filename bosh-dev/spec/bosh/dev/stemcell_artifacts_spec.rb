@@ -9,7 +9,7 @@ module Bosh::Dev
 
         described_class.should_receive(:new) do |version, definitions|
           expect(version).to eq('version')
-          expect(definitions.size).to eq(11)
+          expect(definitions.size).to eq(13)
 
           matrix = definitions.map { |d| [d.infrastructure.name, d.operating_system.name, d.operating_system.version, d.agent.name] }
 
@@ -22,8 +22,10 @@ module Bosh::Dev
           expect(matrix[6]).to  eq(%w(aws ubuntu trusty go))
           expect(matrix[7]).to eq(['aws', 'centos', nil, 'ruby'])
           expect(matrix[8]).to eq(['aws', 'centos', nil, 'go'])
-          expect(matrix[9]).to eq(%w(openstack ubuntu lucid ruby))
-          expect(matrix[10]).to eq(['openstack', 'centos', nil, 'ruby'])
+          expect(matrix[9]).to eq(%w(google ubuntu trusty ruby))
+          expect(matrix[10]).to eq(['google', 'centos', nil, 'ruby'])
+          expect(matrix[11]).to eq(%w(openstack ubuntu lucid ruby))
+          expect(matrix[12]).to eq(['openstack', 'centos', nil, 'ruby'])
 
           artifacts
         end
