@@ -191,6 +191,28 @@ cloud:
     <% end %>
 <% end %>
 
+<% if_p('google.project', 'google.client_email', 'google.pkcs12_key', 'google.default_zone',
+        'google.access_key_id', 'google.secret_access_key',
+        'registry.address', 'registry.http.port', 'registry.http.user',
+        'registry.http.password') do |project, client_email, pkcs12_key, zone,
+                                      access_key_id, secret_access_key,
+                                      reg_address, reg_port, reg_user,
+                                      reg_password| %>
+  plugin: google <% plugin = 'google' %>
+  properties:
+    google:
+      project: <%= project %>
+      client_email: <%= client_email %>
+      pkcs12_key: '<%= pkcs12_key %>'
+      default_zone: <%= zone %>
+      access_key_id: <%= access_key_id %>
+      secret_access_key: <%= secret_access_key %>
+    registry:
+      endpoint: http://<%= reg_address %>:<%= reg_port %>
+      user: <%= reg_user %>
+      password: <%= reg_password %>
+<% end %>
+
 <% if_p('openstack.auth_url', 'openstack.username', 'openstack.api_key',
         'openstack.tenant', 'openstack.default_key_name',
         'openstack.default_security_groups','openstack.wait_resource_poll_interval', 'registry.address',

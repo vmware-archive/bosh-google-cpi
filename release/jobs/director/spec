@@ -269,6 +269,18 @@ properties:
     description: AWS Region used by aws cpi
   aws.stemcell.kernel_id:
     description: AWS kernel id used by aws cpi
+  google.project:
+    description: Google Compute Engine project
+  google.client_email:
+    description: Google Compute Engine client email
+  google.pkcs12_key:
+    description: Google Compute Engine PKCS12 key (Base64 encoded - RFC 2045)
+  google.default_zone:
+    description: Google Compute Engine default Zone
+  google.access_key_id:
+    description: Google Cloud Storage access key id
+  google.secret_access_key:
+    description: Google Cloud Storage secret access key
   openstack.auth_url:
     description: URL of the OpenStack Identity endpoint to connect to
   openstack.username:

@@ -230,6 +230,56 @@ describe 'director.yml.erb.erb' do
     end
   end
 
+  context 'google' do
+    let(:google_properties) {
+      {
+        'project' => 'cloud-project',
+        'client_email' => 'email@developer.gserviceaccount.com',
+        'pkcs12_key' => 'pkcs12-key',
+        'default_zone' => 'zone',
+        'access_key_id' => 'access_key_id',
+        'secret_access_key' => 'secret_access_key'
+      }
+    }
+    let(:registry_properties) {
+      {
+        'address' => 'address',
+        'http' => {
+          'port' => 'port',
+          'user' => 'user',
+          'password' => 'password'
+        }
+      }
+    }
+    let(:registry_parsed) {
+      {
+        'endpoint' => 'http://address:port',
+        'user' => 'user',
+        'password' => 'password'
+      }
+    }
+    let(:spec) { deployment_manifest_fragment }
+    let(:rendered_yaml) { ERB.new(erb_yaml).result(Bosh::Common::TemplateEvaluationContext.new(spec).get_binding) }
+    let(:parsed) { YAML.load(rendered_yaml) }
+
+    before do
+      deployment_manifest_fragment['properties']['google'] = google_properties
+      deployment_manifest_fragment['properties']['registry'] = registry_properties
+    end
+
+    it 'renders plugin correctly' do
+      expect(parsed['cloud']['plugin']).to eq('google')
+    end
+
+    it 'renders google properties correctly' do
+      expect(parsed['cloud']['properties']['google']).to eq(google_properties)
+    end
+
+    it 'renders registry properties correctly' do
+      expect(parsed['cloud']['properties']['registry']).to eq(registry_parsed)
+    end
+  end
+
   context 's3' do
     before do
       deployment_manifest_fragment['properties']['aws'] = {
