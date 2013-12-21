@@ -3,6 +3,7 @@ require 'fakefs/spec_helpers'
 
 describe Bosh::Agent::Bootstrap do
   let(:dummy_platform) { instance_double('Bosh::Agent::Platform::Linux::Adapter') }
+  let(:agent_id) { 'a26efbe5-4845-44a0-9323-b8e36191a2c8' }
 
   before do
     Bosh::Agent::Config.infrastructure_name = "dummy"
@@ -139,6 +140,70 @@ describe Bosh::Agent::Bootstrap do
 
   it "should swap on data disk" do
     @processor.data_sfdisk_input.should == ",3859,S\n,,L\n"
+  end
+
+  describe '#update_hostname' do
+    before do
+      @processor.load_settings
+    end
+
+    let(:hosts_file) { double('File') }
+    let(:hostname_file) { double('File') }
+    let(:hosts) do
+      "127.0.0.1 localhost #{agent_id}\n" +
+      "\n" +
+      "# The following lines are desirable for IPv6 capable hosts\n" +
+      "::1 localhost ip6-localhost ip6-loopback #{agent_id}\n" +
+      "fe00::0 ip6-localnet\n" +
+      "ff00::0 ip6-mcastprefix\n" +
+      "ff02::1 ip6-allnodes\n" +
+      "ff02::2 ip6-allrouters\n" +
+      "ff02::3 ip6-allhosts\n\n\n"
+    end
+
+    it 'should update hostname' do
+      expect(File).to receive(:open).with('/etc/hosts', 'w').and_yield(hosts_file)
+      expect(hosts_file).to receive(:puts).with(hosts)
+
+      expect(@processor).to receive(:sh).with("hostname #{agent_id}")
+
+      expect(File).to receive(:open).with('/etc/hostname', 'w').and_yield(hostname_file)
+      expect(hostname_file).to receive(:puts).with("#{agent_id}")
+
+      @processor.update_hostname
+    end
+
+    context 'when infrastructure is google' do
+      before do
+        Bosh::Agent::Config.infrastructure_name = 'google'
+      end
+
+      let(:hosts) do
+        "127.0.0.1 localhost #{agent_id}\n" +
+        "\n" +
+        "# The following lines are desirable for IPv6 capable hosts\n" +
+        "::1 localhost ip6-localhost ip6-loopback #{agent_id}\n" +
+        "fe00::0 ip6-localnet\n" +
+        "ff00::0 ip6-mcastprefix\n" +
+        "ff02::1 ip6-allnodes\n" +
+        "ff02::2 ip6-allrouters\n" +
+        "ff02::3 ip6-allhosts\n\n\n" +
+        "# Google Compute Engine Metadata endpoint (used by the google daemon)\n" +
+        "169.254.169.254 metadata.google.internal metadata\n\n"
+      end
+
+      it 'should update hostname' do
+        expect(File).to receive(:open).with('/etc/hosts', 'w').and_yield(hosts_file)
+        expect(hosts_file).to receive(:puts).with(hosts)
+
+        expect(@processor).to receive(:sh).with("hostname #{agent_id}")
+
+        expect(File).to receive(:open).with('/etc/hostname', 'w').and_yield(hostname_file)
+        expect(hostname_file).to receive(:puts).with("#{agent_id}")
+
+        @processor.update_hostname
+      end
+    end
   end
 
   describe "#setup_data_disk" do

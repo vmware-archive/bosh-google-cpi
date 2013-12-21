@@ -116,6 +116,32 @@ describe Bosh::Agent::Platform::Linux::Disk do
     end
   end
 
+  context 'Google' do
+    let(:settings) do
+      { 'disks' => { 'persistent' => { 2 => 'persistent-disk-2' } } }
+    end
+    let(:infrastructure_name) { 'google' }
+
+    context 'data disk device name' do
+      it 'does not get a device name' do
+        expect(disk_manager.get_data_disk_device_name).to be_nil
+      end
+
+      context 'when not present at settings' do
+        let(:settings) { { 'disks' => {} } }
+        it 'does not get a device name' do
+          expect(disk_manager.get_data_disk_device_name).to be_nil
+        end
+      end
+    end
+
+    it 'looks up disk by cid' do
+      Dir.should_receive(:glob).with(%w(/dev/disk/by-id/google-persistent-disk-2)).twice
+        .and_return(%w(/dev/disk/by-id/google-persistent-disk-2))
+      expect(disk_manager.lookup_disk_by_cid(2)).to eq '/dev/disk/by-id/google-persistent-disk-2'
+    end
+  end
+
   context 'OpenStack' do
     let(:settings) do
       { 'disks' => { 'ephemeral' => '/dev/sdq',

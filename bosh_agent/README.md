@@ -20,9 +20,10 @@ The Agent performs the following tasks:
 
 For each different agent infrastructure:
 
-* `bosh_agent -c -I aws` => attempts to load the config settings from an AWS registry; the registry HTTP address is provided to the bosh_agent via the [AWS user-data](https://github.com/cloudfoundry/bosh/blob/master/bosh_aws_cpi/lib/cloud/aws/instance_manager.rb#L159-L166)
+* `bosh_agent -c -I aws` => attempts to load the config settings from the BOSH registry (bosh-registry project folder); the registry HTTP address is provided to the bosh_agent via the [AWS user-data](https://github.com/cloudfoundry/bosh/blob/master/bosh_aws_cpi/lib/cloud/aws/instance_manager.rb#L159-L166)
 * `bosh_agent -c -I vsphere` => attempts to load the config settings via a mounted fake cdrom
-* `bosh_agent -c -I openstack`  => attempts to load the config settings from OpenStack registry (same as AWS registry - bosh-registry project folder); openstack user-data is provided by both user-data and a user-data.json file (the former isn't supported by Rackspace)
+* `bosh_agent -c -I openstack`  => attempts to load the config settings from the BOSH registry (bosh-registry project folder); the registry HTTP address is provided to the bosh_agent via the openstack user-data (provided by both OpenStack metadata server and a user-data.json file)
+* `bosh_agent -c -I google`  => attempts to load the config settings from the BOSH registry (bosh-registry project folder); the registry HTTP address is provided to the bosh_agent via the [Google Compute Engine metadata](https://developers.google.com/compute/docs/metadata)
 
 ### CLI option overrides
 

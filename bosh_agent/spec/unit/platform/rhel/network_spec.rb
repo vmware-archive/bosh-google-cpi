@@ -58,6 +58,29 @@ describe Bosh::Agent::Platform::Centos::Network do
     end
   end
 
+  context 'Google' do
+    let (:partial_settings) do
+      json = %q[{"networks":{"default":{"dns":["1.2.3.4"],"default":["gateway","dns"]}}]
+      Yajl::Parser.new.parse(json)
+    end
+
+    it 'should configure dhcp with dns server prepended' do
+      Bosh::Agent::Config.infrastructure_name = 'google'
+      Bosh::Agent::Config.instance_variable_set :@infrastructure, nil
+      Bosh::Agent::Config.infrastructure.stub(load_settings: partial_settings)
+      Bosh::Agent::Config.settings = partial_settings
+
+      Bosh::Agent::Util.should_receive(:update_file) do |contents, file|
+        contents.should match /^prepend domain-name-servers 1\.2\.3\.4;$/
+        file.should == '/etc/dhcp/dhclient.conf'
+        true # fake a change
+      end
+      network_wrapper.should_receive(:restart_dhclient)
+
+      network_wrapper.setup_networking
+    end
+  end
+
   context 'OpenStack' do
     let (:partial_settings) do
       json = %q[{"networks":{"default":{"dns":["1.2.3.4"],"default":["gateway","dns"]}}]

@@ -5,6 +5,7 @@ module Bosh::Agent
     include Bosh::Exec
 
     VSPHERE_DATA_DISK = "/dev/sdb"
+    GOOGLE_DEVICE_PREFIX = '/dev/disk/by-id/google-'
     DEV_PATH_TIMEOUT=180
     DISK_RETRY_MAX_DEFAULT = 30
 
@@ -31,7 +32,7 @@ module Bosh::Agent
       case @config.infrastructure_name
         when "vsphere", "vcloud"
           VSPHERE_DATA_DISK
-        when "aws", "openstack"
+        when "aws", "google", "openstack"
           settings = @config.settings
           dev_path = settings['disks']['ephemeral']
           unless dev_path
@@ -59,6 +60,10 @@ module Bosh::Agent
         when "aws", "openstack"
           # AWS & OpenStack pass in the device name
           get_available_path(disk_id)
+        when "google"
+          # Google pass in the device name and we need to find the real disk
+          device = get_available_path("#{GOOGLE_DEVICE_PREFIX}#{disk_id}")
+          get_real_device_name(device)
         else
           raise Bosh::Agent::FatalError, "Lookup disk failed, unsupported infrastructure #{Bosh::Agent::Config.infrastructure_name}"
       end
@@ -108,6 +113,11 @@ module Bosh::Agent
         blockdev = detect_block_device(disk_id)
       end
       File.join('/dev', blockdev)
+    end
+
+    def get_real_device_name(device)
+      return device unless File.symlink?(device)
+      File.expand_path(File.readlink(device), File.dirname(device))
     end
 
     def mount_exists?(partition)

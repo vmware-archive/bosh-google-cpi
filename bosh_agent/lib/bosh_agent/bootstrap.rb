@@ -126,7 +126,7 @@ module Bosh::Agent
       result = template.result(binding)
       File.open('/etc/hosts', 'w') { |f| f.puts(result) }
 
-      `hostname #{agent_id}`
+      sh "hostname #{agent_id}"
       File.open('/etc/hostname', 'w') { |f| f.puts(agent_id) }
     end
 
@@ -345,6 +345,11 @@ ff00::0 ip6-mcastprefix
 ff02::1 ip6-allnodes
 ff02::2 ip6-allrouters
 ff02::3 ip6-allhosts
+
+<% if Bosh::Agent::Config.infrastructure_name == 'google' %>
+# Google Compute Engine Metadata endpoint (used by the google daemon)
+169.254.169.254 metadata.google.internal metadata
+<% end %>
 TEMPLATE
 
   end

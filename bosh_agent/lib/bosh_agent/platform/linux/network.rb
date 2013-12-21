@@ -18,6 +18,8 @@ module Bosh::Agent
           setup_networking_from_settings
         when "aws"
           setup_dhcp_from_settings
+        when "google"
+          setup_dhcp_from_settings
         when "openstack"
           setup_dhcp_from_settings
         else

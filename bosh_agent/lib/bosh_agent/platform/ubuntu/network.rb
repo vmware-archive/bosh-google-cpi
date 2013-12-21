@@ -61,7 +61,13 @@ module Bosh::Agent
     # before restarting the network, we first kill all dhclient3 process.
     def restart_dhclient
       sh('pkill dhclient', :on_error => :return)
-      sh('/etc/init.d/networking restart', :on_error => :return)
+      sh("ifdown #{network_interface_options}", :on_error => :return)
+      sh("ifup #{network_interface_options}", :on_error => :return)
+    end
+
+    def network_interface_options
+      result = sh('ifup --version', :on_error => :return)
+      result.output.match('ifup version 0\.7') ? '-a --no-loopback' : '-a --exclude=lo'
     end
 
   end
