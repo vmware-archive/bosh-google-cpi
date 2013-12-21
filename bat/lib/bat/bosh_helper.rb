@@ -29,6 +29,10 @@ module Bat
       @bosh_api.info['cpi'] == 'aws'
     end
 
+    def google?
+      @bosh_api.info['cpi'] == 'google'
+    end
+
     def openstack?
       @bosh_api.info['cpi'] == 'openstack'
     end
