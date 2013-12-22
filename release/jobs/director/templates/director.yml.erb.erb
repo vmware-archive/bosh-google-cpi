@@ -83,7 +83,7 @@ dns:
 blobstore:
   provider: <%= p('blobstore.provider') %>
   options:
-<% if p('blobstore.provider') == 's3' %>
+<% if %w(s3 google).include?(p('blobstore.provider')) %>
     bucket_name: <%= p('blobstore.bucket_name') %>
     access_key_id: <%= p('blobstore.access_key_id') %>
     secret_access_key: <%= p('blobstore.secret_access_key') %>
@@ -99,6 +99,9 @@ blobstore:
 <% if_p('blobstore.s3_force_path_style') do |s3_force_path_style| %>
     s3_force_path_style: <%= s3_force_path_style %>
 <% end %>
+<% if_p('blobstore.encryption_key') do |encryption_key| %>
+    encryption_key: <%= encryption_key %>
+<% end %>
 <% else %>
     endpoint: http://<%= p('blobstore.address') %>:<%= p('blobstore.port') %>
     user: <%= p('blobstore.director.user') %>
@@ -110,6 +113,17 @@ blobstore:
         'compiled_package_cache.options.secret_access_key') do |bucket_name, access_key_id, secret_access_key| %>
 compiled_package_cache:
   provider: s3
+  options:
+    bucket_name: <%= bucket_name %>
+    access_key_id: <%= access_key_id %>
+    secret_access_key: <%= secret_access_key %>
+<% end %>
+
+<% if_p('compiled_package_cache.options.google_bucket_name',
+        'compiled_package_cache.options.google_access_key_id',
+        'compiled_package_cache.options.google_secret_access_key') do |bucket_name, access_key_id, secret_access_key| %>
+compiled_package_cache:
+  provider: google
   options:
     bucket_name: <%= bucket_name %>
     access_key_id: <%= access_key_id %>
@@ -337,7 +351,7 @@ cloud:
       blobstore:
         provider: <%= p('blobstore.provider') %>
         options:
-      <% if p('blobstore.provider') == "s3" %>
+      <% if %w(s3 google).include?(p('blobstore.provider')) %>
           bucket_name: <%= p('blobstore.bucket_name') %>
           access_key_id: <%= p(['agent.blobstore.access_key_id', 'blobstore.access_key_id']) %>
           secret_access_key: <%= p(['agent.blobstore.secret_access_key', 'blobstore.secret_access_key']) %>
@@ -352,6 +366,9 @@ cloud:
       <% end %>
       <% if_p('blobstore.s3_force_path_style') do |s3_force_path_style| %>
           s3_force_path_style: <%= s3_force_path_style %>
+      <% end %>
+      <% if_p('blobstore.encryption_key') do |encryption_key| %>
+          encryption_key: <%= encryption_key %>
       <% end %>
       <% else %>
           endpoint: 'http://<%= p(['agent.blobstore.address', 'blobstore.address']) %>:<%= p('blobstore.port') %>'

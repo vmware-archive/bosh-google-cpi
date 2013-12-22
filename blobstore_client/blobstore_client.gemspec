@@ -22,6 +22,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'aws-sdk',         '1.32.0'
   s.add_dependency 'fog',             '~>1.19.0'
+  s.add_dependency 'google-api-client', '~>0.6.4'
   s.add_dependency 'httpclient',      '=2.2.4'
   s.add_dependency 'multi_json',      '~> 1.1'
   s.add_dependency 'ruby-atmos-pure', '~> 1.0.5'

@@ -14,6 +14,8 @@
 # irb(main):003:0> bsc.delete(oid)
 # => true
 
+$LOAD_PATH.unshift(File.expand_path('../../lib', __FILE__))
+
 require 'blobstore_client'
 require 'irb'
 require 'irb/completion'

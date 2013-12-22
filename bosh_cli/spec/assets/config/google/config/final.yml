@@ -1,0 +1,5 @@
+---
+blobstore:
+  provider: google
+  options:
+    bucket_name: test

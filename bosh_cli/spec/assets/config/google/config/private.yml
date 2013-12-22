@@ -1,0 +1,5 @@
+---
+blobstore:
+  google:
+    secret_access_key: foo
+    access_key_id: bar

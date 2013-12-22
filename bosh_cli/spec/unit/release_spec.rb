@@ -88,6 +88,22 @@ describe Bosh::Cli::Release do
       r.has_blobstore_secret?.should be(true)
     end
 
+    it "should merge google secrets into options" do
+      r = Bosh::Cli::Release.new(spec_asset("config/google"))
+      opts = {
+          :bucket_name => "test",
+          :secret_access_key => "foo",
+          :access_key_id => "bar"
+      }
+      Bosh::Blobstore::Client.should_receive(:safe_create).with("google", opts)
+      r.blobstore
+    end
+
+    it "should detect blobstore secrets for google options" do
+      r = Bosh::Cli::Release.new(spec_asset("config/google"))
+      r.has_blobstore_secret?.should be(true)
+    end
+
     it "should merge atmos secrets into options" do
       r = Bosh::Cli::Release.new(spec_asset("config/atmos"))
       opts = {

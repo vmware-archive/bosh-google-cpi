@@ -21,6 +21,10 @@ module Bosh::Blobstore
           expect(Client.create('atmos', {})).to be_instance_of(AtmosBlobstoreClient)
         end
 
+        it 'returns google client' do
+          expect(Client.create('google', bucket_name: 'foo')).to be_instance_of(GoogleBlobstoreClient)
+        end
+
         it 'returns s3 client' do
           expect(Client.create('s3', {
             access_key_id: 'foo',

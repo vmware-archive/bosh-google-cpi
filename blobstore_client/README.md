@@ -78,6 +78,19 @@ These are the options for the Blobstore client when provider is `atmos`:
 * `secret` (required)
   Atmos password
 
+### Google Cloud Storage
+
+These are the options for the Blobstore client when provider is `google`:
+
+* `bucket_name` (required)
+  Name of the Google Cloud Storage bucket
+* `access_key_id` (optional, the blobstore client operates in read only mode if not present)
+  Google Cloud Storage Access Key
+* `secret_access_key` (optional, the blobstore client operates in read only mode if not present)
+  Google Cloud Storage Secret Access Key
+* `encryption_key` (optional)
+  Encryption key that is applied before the object is stored in Google Cloud Storage
+
 ### OpenStack Swift provider
 
 These are the options for the Blobstore client when provider is `swift`:

@@ -151,14 +151,16 @@ properties:
 
   # Blobstore
   blobstore.provider:
-    description: Provider of the blobstore used by director and agent (dav|simple|s3)
+    description: Provider of the blobstore used by director and agent (dav|simple|s3|google)
     default: 'dav'
   blobstore.bucket_name:
-    description: AWS S3 Bucket used by s3 blobstore plugin
+    description: Bucket used by s3 and google blobstore plugins
   blobstore.access_key_id:
-    description: AWS access_key_id used by s3 blobstore plugin
+    description: Access key id used by s3 and google blobstore plugins
   blobstore.secret_access_key:
-    description: AWS secret_access_key used by s3 blobstore plugin
+    description: Secret access key used by s3 and google blobstore plugins
+  blobstore.encryption_key:
+    description: Optional encrytion key used by s3 and google blobstore plugins
   blobstore.address:
     description: Address of blobstore server used by simple blobstore plugin
   blobstore.port:
@@ -205,6 +207,12 @@ properties:
     description: AWS access_key_id used for the compiled package cache
   compiled_package_cache.options.secret_access_key:
     description: AWS secret_access_key used for the compiled package cache
+  compiled_package_cache.options.google_bucket_name:
+    description: Google Cloud Storage Bucket used for the compiled package cache
+  compiled_package_cache.options.google_access_key_id:
+    description: Google Cloud Storage access_key_id used for the compiled package cache
+  compiled_package_cache.options.google_secret_access_key:
+    description: Google Cloud Storage secret_access_key used for the compiled package cache
   compiled_package_cache.options.swift_provider:
     description:  OpenStack Swift provider (supported providers are hp, openstack and rackspace)
   compiled_package_cache.options.container_name:
