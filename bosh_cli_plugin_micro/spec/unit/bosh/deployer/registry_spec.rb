@@ -15,6 +15,7 @@ module Bosh::Deployer
     let(:cloud_properties) { 'fake-properties' }
     let(:http_client) { instance_double(HTTPClient, head: nil) }
     let(:db) { instance_double('Sequel::SQLite::Database') }
+    let(:log_file) { File.expand_path(Bosh::Deployer::Registry::BOSH_REGISTRY_LOGFILE) }
 
     before do
       allow(ENV).to receive(:to_hash).and_return('PATH' => '/bin')
@@ -49,7 +50,7 @@ module Bosh::Deployer
 
       it 'writes out a configuration file for bosh-registry' do
         expected_hash = {
-          'logfile' => './bosh-registry.log',
+          'logfile' => log_file,
           'http' => {
             'port' => 1234,
             'user' => 'fake-user',
@@ -97,7 +98,8 @@ module Bosh::Deployer
 
       it 'spawns the registry' do
         subject.start
-        expect(Process).to have_received(:spawn).with('bosh-registry -c fake-config-path')
+        expect(Process).to have_received(:spawn)
+                           .with('bosh-registry -c fake-config-path', { err: [log_file, 'w'] })
       end
 
       it 'waits for the registry to spawn' do

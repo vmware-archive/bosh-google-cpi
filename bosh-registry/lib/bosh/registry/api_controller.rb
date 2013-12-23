@@ -3,6 +3,7 @@
 module Bosh::Registry
 
   class ApiController < Sinatra::Base
+    enable :logging
 
     not_found do
       exception = request.env["sinatra.error"]

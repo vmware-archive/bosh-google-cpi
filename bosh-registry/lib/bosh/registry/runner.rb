@@ -27,6 +27,7 @@ module Bosh::Registry
       @logger.info "HTTP server is starting on port #{@http_port}..."
       @http_server = Thin::Server.new("0.0.0.0", @http_port, :signals => false) do
         Thin::Logging.silent = true
+        use Rack::CommonLogger
         map "/" do
           run Bosh::Registry::ApiController.new
         end

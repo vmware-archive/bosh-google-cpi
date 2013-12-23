@@ -5,6 +5,8 @@ module Bosh::Deployer
   class Registry
     attr_reader :port
 
+    BOSH_REGISTRY_LOGFILE = './bosh-registry.log'
+
     def initialize(endpoint, cloud_plugin, cloud_properties, state, logger)
       @cloud_properties = cloud_properties
       @state = state
@@ -30,7 +32,7 @@ module Bosh::Deployer
 
       cmd = "bosh-registry -c #{@registry_config.path}"
 
-      @registry_pid = Process.spawn(cmd)
+      @registry_pid = Process.spawn(cmd, err: [File.expand_path(BOSH_REGISTRY_LOGFILE), 'w'])
 
       watch_for_crash(cmd)
       wait_for_listen
@@ -111,7 +113,7 @@ module Bosh::Deployer
       @db_file = Tempfile.new('bosh_registry_db')
 
       registry_config = {
-        'logfile' => './bosh-registry.log',
+        'logfile' => File.expand_path(BOSH_REGISTRY_LOGFILE),
         'http' => {
           'port' => port,
           'user' => user,
