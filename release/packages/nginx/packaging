@@ -22,6 +22,7 @@ cd nginx-1.4.1
   --prefix=${BOSH_INSTALL_TARGET} \
   --with-pcre=../pcre-8.32 \
   --with-http_ssl_module \
-  --with-http_dav_module
+  --with-http_dav_module \
+  --with-file-aio
 make
 make install

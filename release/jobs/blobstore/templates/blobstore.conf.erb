@@ -8,6 +8,10 @@ server {
   client_max_body_size 1G;
 
   location / {
+    aio            on;
+    directio       512;
+    output_buffers 1 512k;
+
     root /var/vcap/store/blobstore/store/;
     client_body_temp_path /var/vcap/store/blobstore/tmp/uploads;
 
