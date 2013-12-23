@@ -33,6 +33,9 @@ properties:
   director.backend_port:
     description: Port that the director listens on
     default: 25556
+  director.workers:
+    description: Number of director workers
+    default: 3
   director.nginx.workers:
     default: 2
     description: Number of nginx workers for director
