@@ -60,4 +60,10 @@ describe 'CentOS stemcell' do
       it { should contain 'TYPE="Ethernet"' }
     end
   end
+
+  context 'installed by rsyslog' do
+    describe file('/etc/rsyslog.conf') do
+      it { should_not contain('$ModLoad imklog') }
+    end
+  end
 end

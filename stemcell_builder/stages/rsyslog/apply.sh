@@ -113,6 +113,11 @@ run_in_bosh_chroot $chroot "
 
 # Add configuration files
 cp $assets_dir/rsyslog.conf $chroot/etc/rsyslog.conf
+if [ -f $chroot/etc/centos-release ] # Centos
+then
+  # Disable kernel logging
+  sed "/^\$ModLoad imklog/d" -i $chroot/etc/rsyslog.conf
+fi
 cp $assets_dir/rsyslog_upstart.conf $chroot/etc/init/rsyslog.conf
 cp $assets_dir/rsyslog_logrotate.conf $chroot/etc/logrotate.d/rsyslog
 
