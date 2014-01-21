@@ -10,7 +10,7 @@ module Bosh::Director
     end
 
     def update
-      @logger.info("Deleting no longer needed instances")
+      @logger.info("Deleting no longer needed instances for `#{@job.name}'")
       delete_unneeded_instances
 
       instances = []
@@ -23,24 +23,24 @@ module Bosh::Director
         return
       end
 
-      @logger.info("Found #{instances.size} instances to update")
+      @logger.info("Found #{instances.size} instances for `#{@job.name}' to update")
       event_log_stage = @event_log.begin_stage("Updating job", instances.size, [ @job.name ])
 
       ThreadPool.new(:max_threads => @job.update.max_in_flight).wrap do |pool|
         num_canaries = [ @job.update.canaries, instances.size ].min
-        @logger.info("Starting canary update num_canaries=#{num_canaries}")
+        @logger.info("Starting canary update for `#{@job.name}' num_canaries=#{num_canaries}")
         update_canaries(pool, instances, num_canaries, event_log_stage)
 
-        @logger.info("Waiting for canaries to update")
+        @logger.info("Waiting for `#{@job.name}' canaries to update")
         pool.wait
 
-        @logger.info("Finished canary update")
+        @logger.info("Finished canary update for `#{@job.name}'")
 
-        @logger.info("Continuing the rest of the update")
+        @logger.info("Continuing the rest of the update for `#{@job.name}'")
         update_instances(pool, instances, event_log_stage)
       end
 
-      @logger.info("Finished the rest of the update")
+      @logger.info("Finished the rest of the update for `#{@job.name}'")
     end
 
     private
