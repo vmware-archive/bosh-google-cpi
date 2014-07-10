@@ -20,7 +20,7 @@ Gem::Specification.new do |s|
   s.bindir       = 'bin'
   s.executables  = %w(blobstore_client_console)
 
-  s.add_dependency 'aws-sdk',         '1.32.0'
+  s.add_dependency 'aws-sdk',         '1.44.0'
   s.add_dependency 'fog',             '~>1.22.0'
   s.add_dependency 'google-api-client', '~>0.6.4'
   s.add_dependency 'httpclient',      '=2.2.4'
