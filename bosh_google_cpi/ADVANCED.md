@@ -56,13 +56,13 @@ Build and install the BOSH gems located at the [Google Compute Engine BOSH CPI](
 
 ```
 cd /bosh-workspace/
-mkdir -p {deployments,releases,stemcells}
+mkdir -p {apps,deployments,releases,stemcells,.ssh}
 git clone -b google-cpi https://github.com/cf-platform-eng/bosh-google-cpi.git
 cd bosh-google-cpi
 bundle install --local
 gem install bosh_cli_plugin_micro -v 1.2479.0
 gem install vendor/cache/fog-1.22.0.gem
-for gem in blobstore_client bosh-registry bosh_google_cpi bosh_openstack_cpi bosh_cli bosh_cli_plugin_micro; do
+for gem in bosh-core bosh_common bosh-registry bosh_cpi bosh_aws_cpi bosh_google_cpi bosh_openstack_cpi bosh_vsphere_cpi blobstore_client agent_client bosh-monitor bosh_cli bosh_cli_plugin_aws bosh_cli_plugin_micro; do
     pushd $gem && gem build $gem.gemspec && gem install --local $gem*.gem && popd
 done
 ```
@@ -90,4 +90,19 @@ mkdir -p /bosh-workspace/deployments/cf
 cd /bosh-workspace/deployments/cf
 wget https://gist.githubusercontent.com/frodenas/dfcf30b4a7ef51549775/raw/cf.yml
 wget https://gist.githubusercontent.com/frodenas/6711234bab7a28d422b4/raw/cf-full.yml
+```
+
+Download an application example:
+
+```
+cd /bosh-workspace/apps/
+git clone https://github.com/cloudfoundry-community/cf-env.git
+```
+
+Download and install the CloudFoundry CLI:
+
+```
+cd /tmp
+wget https://cli.run.pivotal.io/stable?release=debian64 -O cf-cli_amd64.deb
+sudo dpkg -i cf-cli_amd64.deb
 ```
